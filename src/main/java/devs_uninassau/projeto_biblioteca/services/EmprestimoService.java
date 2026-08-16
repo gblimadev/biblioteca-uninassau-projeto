@@ -1,11 +1,15 @@
 package devs_uninassau.projeto_biblioteca.services;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import javax.management.RuntimeErrorException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import devs_uninassau.projeto_biblioteca.entities.Emprestimo;
+import devs_uninassau.projeto_biblioteca.exceptions.LivroIndisponivelException;
 import devs_uninassau.projeto_biblioteca.repositories.EmprestimoRepository;
 
 @Service
@@ -15,6 +19,14 @@ public class EmprestimoService {
 	private EmprestimoRepository emprestimoRepository;
 
 	public Emprestimo insert(Emprestimo emprestimo) {
+		
+		boolean livroEmprestado = emprestimoRepository.existsByLivroIdAndDataDevolucaoIsNull(
+				emprestimo.getLivro().getId());
+		
+		if (livroEmprestado) {
+			throw new LivroIndisponivelException("Livro já está emprestado");
+		}
+		
 		return emprestimoRepository.save(emprestimo);
 	}
 
@@ -40,4 +52,13 @@ public class EmprestimoService {
 
 		return emprestimoRepository.save(emprestimoAtual);
 	}
+	
+	public Emprestimo devolver(Long id) {
+		Emprestimo emprestimo = emprestimoRepository.findById(id).get();
+		
+		emprestimo.setDataDevolucao(LocalDate.now());
+		
+		return emprestimoRepository.save(emprestimo);
+	}
+	
 }

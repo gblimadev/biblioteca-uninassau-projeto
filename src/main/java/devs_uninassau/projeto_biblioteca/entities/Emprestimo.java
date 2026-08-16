@@ -29,7 +29,7 @@ public class Emprestimo {
 
 	public Emprestimo(Long id, LocalDate dataEmprestimo, LocalDate dataDevolucao, Usuario usuario, Livro livro) {
 		this.id = id;
-		this.dataEmprestimo = dataEmprestimo;
+		this.dataEmprestimo = LocalDate.now();
 		this.dataDevolucao = dataDevolucao;
 		this.usuario = usuario;
 		this.livro = livro;

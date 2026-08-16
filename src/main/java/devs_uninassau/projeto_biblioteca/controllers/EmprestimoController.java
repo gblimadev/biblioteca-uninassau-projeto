@@ -47,4 +47,9 @@ public class EmprestimoController {
 		return emprestimoService.update(id, emprestimo);
 	}
 	
+	@PutMapping("/{id}/devolucao")
+	public Emprestimo devolver(@PathVariable Long id) {
+	    return emprestimoService.devolver(id);
+	}
+	
 }
