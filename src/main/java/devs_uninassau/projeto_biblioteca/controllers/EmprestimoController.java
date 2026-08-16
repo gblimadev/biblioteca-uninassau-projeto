@@ -19,8 +19,11 @@ import devs_uninassau.projeto_biblioteca.services.EmprestimoService;
 @RequestMapping("/emprestimos")
 public class EmprestimoController {
 
-	@Autowired
-	private EmprestimoService emprestimoService;
+	private final EmprestimoService emprestimoService;
+
+	EmprestimoController(EmprestimoService emprestimoService) { // o controller precisa do service, ele recebe uma instacia do service que já foi instanciado pelo spring quando a anotation @service foi aplicada
+		this.emprestimoService = emprestimoService;
+	}
 
 	@PostMapping
 	public Emprestimo insert(@RequestBody Emprestimo emprestimo) {
