@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import devs_uninassau.projeto_biblioteca.dto.UsuarioDTO;
+import devs_uninassau.projeto_biblioteca.dto.UsuarioResponseDTO;
 import devs_uninassau.projeto_biblioteca.entities.Usuario;
 import devs_uninassau.projeto_biblioteca.services.UsuarioService;
 import jakarta.validation.Valid;
@@ -22,36 +23,78 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@PostMapping
-	public ResponseEntity<Usuario> insert(@Valid @RequestBody Usuario usuario) {
-		
+	public ResponseEntity<UsuarioResponseDTO> insert(@Valid @RequestBody UsuarioDTO usuarioDTO) {
+
+		Usuario usuario = new Usuario();
+		usuario.setNome(usuarioDTO.getNome());
+		usuario.setEmail(usuarioDTO.getEmail());
+
 		usuarioService.insert(usuario);
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+
+		UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO();
+		usuarioResponseDTO.setId(usuario.getId());
+		usuarioResponseDTO.setNome(usuario.getNome());
+		usuarioResponseDTO.setNome(usuario.getEmail());
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponseDTO);
 	}
-	
+
 	@GetMapping
-    public List<Usuario> findAll() {
-        return usuarioService.findAll();
-    }
+	public List<UsuarioResponseDTO> findAll() {
 
-    @GetMapping("/{id}")
-    public Usuario findById(@PathVariable Long id) {
-        return usuarioService.findById(id);
-    }
+		List<Usuario> usuarios = usuarioService.findAll();
 
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id) {
-        usuarioService.deleteById(id);
-    }
+		List<UsuarioResponseDTO> resposta = usuarios.stream().map(usuario -> {
 
-    @PutMapping("/{id}")
-    public Usuario update(@PathVariable Long id, @RequestBody Usuario usuario) {
-        return usuarioService.update(id, usuario);
-    }
-    
+			UsuarioResponseDTO usuarioResponsedto = new UsuarioResponseDTO();
+
+			usuarioResponsedto.setId(usuario.getId());
+			usuarioResponsedto.setNome(usuario.getNome());
+			usuarioResponsedto.setEmail(usuario.getEmail());
+
+			return usuarioResponsedto;
+			
+		}).toList();
+		
+		return resposta;
+	}
+
+	@GetMapping("/{id}")
+	public UsuarioResponseDTO findById(@PathVariable Long id) {
+		
+		Usuario usuario = usuarioService.findById(id);
+		
+		UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO();
+		usuarioResponseDTO.setId(usuario.getId());
+		usuarioResponseDTO.setNome(usuario.getNome());
+		usuarioResponseDTO.setEmail(usuario.getEmail());
+		
+		return usuarioResponseDTO;
+	}
+
+	@DeleteMapping("/{id}")
+	public void deleteById(@PathVariable Long id) {
+		usuarioService.deleteById(id);
+	}
+
+	@PutMapping("/{id}")
+	public UsuarioResponseDTO update(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
+		
+		Usuario usuario = usuarioService.findById(id);
+		usuario.setNome(usuarioDTO.getNome());
+		usuario.setEmail(usuarioDTO.getEmail());
+		usuarioService.update(id, usuario);
+	
+		UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO();
+		usuarioResponseDTO.setNome(usuario.getNome());
+		usuarioResponseDTO.setEmail(usuario.getEmail());
+		
+		return usuarioResponseDTO;
+	}
+
 }
