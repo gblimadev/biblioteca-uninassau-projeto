@@ -51,13 +51,13 @@ public class UsuarioController {
 
 		List<UsuarioResponseDTO> resposta = usuarios.stream().map(usuario -> {
 
-			UsuarioResponseDTO usuarioResponsedto = new UsuarioResponseDTO();
+			UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO();
 
-			usuarioResponsedto.setId(usuario.getId());
-			usuarioResponsedto.setNome(usuario.getNome());
-			usuarioResponsedto.setEmail(usuario.getEmail());
+			usuarioResponseDTO.setId(usuario.getId());
+			usuarioResponseDTO.setNome(usuario.getNome());
+			usuarioResponseDTO.setEmail(usuario.getEmail());
 
-			return usuarioResponsedto;
+			return usuarioResponseDTO;
 			
 		}).toList();
 		
