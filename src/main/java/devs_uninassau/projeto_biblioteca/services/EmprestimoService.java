@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import devs_uninassau.projeto_biblioteca.entities.Emprestimo;
 import devs_uninassau.projeto_biblioteca.exceptions.LivroIndisponivelException;
+import devs_uninassau.projeto_biblioteca.exceptions.ResourceNotFoundException;
 import devs_uninassau.projeto_biblioteca.repositories.EmprestimoRepository;
 
 @Service
@@ -24,7 +25,7 @@ public class EmprestimoService {
 				emprestimo.getLivro().getId());
 		
 		if (livroEmprestado) {
-			throw new LivroIndisponivelException("Livro já está emprestado");
+			throw new LivroIndisponivelException("Livro já está emprestado.");
 		}
 		
 		return emprestimoRepository.save(emprestimo);
@@ -35,7 +36,7 @@ public class EmprestimoService {
 	}
 
 	public Emprestimo findById(Long id) {
-		return emprestimoRepository.findById(id).get();
+		return emprestimoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Emprestimo não encontrado."));
 	}
 
 	public void deleteById(Long id) {
@@ -54,7 +55,7 @@ public class EmprestimoService {
 	}
 	
 	public Emprestimo devolver(Long id) {
-		Emprestimo emprestimo = emprestimoRepository.findById(id).get();
+		Emprestimo emprestimo = emprestimoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Emprestimo não encontrado."));;
 		
 		emprestimo.setDataDevolucao(LocalDate.now());
 		

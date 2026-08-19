@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import devs_uninassau.projeto_biblioteca.entities.Usuario;
+import devs_uninassau.projeto_biblioteca.exceptions.ResourceNotFoundException;
 import devs_uninassau.projeto_biblioteca.repositories.UsuarioRepository;
 
 @Service
@@ -23,7 +24,7 @@ public class UsuarioService {
 	}
 
 	public Usuario findById(Long id) {
-		return usuarioRepository.findById(id).get();
+		return usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado."));
 	}
 
 	public void deleteById(Long id) {
@@ -31,7 +32,7 @@ public class UsuarioService {
 	}
 
 	public Usuario update(Long id, Usuario usuario) {
-		Usuario usuarioAtual = usuarioRepository.findById(id).get();
+		Usuario usuarioAtual = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado."));
 
 		usuarioAtual.setNome(usuario.getNome());
 		usuarioAtual.setEmail(usuario.getEmail());

@@ -18,7 +18,7 @@ public class ExceptionHandlerController {
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<List<String>> handleVaidation(MethodArgumentNotValidException e) {
+	public ResponseEntity<List<String>> handleValidation(MethodArgumentNotValidException e) {
 		
 		List<String> errors = e.getBindingResult().getFieldErrors()
 							.stream()
@@ -28,4 +28,13 @@ public class ExceptionHandlerController {
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	}
+	
+	@ExceptionHandler
+	public ResponseEntity<String> resourceNotFound(ResourceNotFoundException e) {
+
+		String mensagem = e.getMessage();
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensagem);
+	}
+	
 }
