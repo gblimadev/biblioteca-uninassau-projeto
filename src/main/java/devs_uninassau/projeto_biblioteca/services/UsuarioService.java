@@ -24,7 +24,8 @@ public class UsuarioService {
 	}
 
 	public Usuario findById(Long id) {
-		return usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado."));
+		return usuarioRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado."));
 	}
 
 	public void deleteById(Long id) {
@@ -32,7 +33,8 @@ public class UsuarioService {
 	}
 
 	public Usuario update(Long id, Usuario usuario) {
-		Usuario usuarioAtual = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado."));
+		Usuario usuarioAtual = usuarioRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado."));
 
 		usuarioAtual.setNome(usuario.getNome());
 		usuarioAtual.setEmail(usuario.getEmail());

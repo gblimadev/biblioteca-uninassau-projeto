@@ -18,23 +18,27 @@ public class ExceptionHandlerController {
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<List<String>> handleValidation(MethodArgumentNotValidException e) {
-		
+	public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException e) {
+			
 		List<String> errors = e.getBindingResult().getFieldErrors()
 							.stream()
 							.map(
 							error -> error.getField() + ": " + error.getDefaultMessage())
 							.toList();
 		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Dados inválidos", errors);
+	
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 	
-	@ExceptionHandler
-	public ResponseEntity<String> resourceNotFound(ResourceNotFoundException e) {
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<ErrorResponse> resourceNotFound(ResourceNotFoundException e) {
 
 		String mensagem = e.getMessage();
 		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensagem);
+		ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), mensagem);
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
 	
 }
