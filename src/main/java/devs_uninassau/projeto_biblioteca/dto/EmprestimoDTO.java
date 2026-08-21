@@ -1,8 +1,13 @@
 package devs_uninassau.projeto_biblioteca.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class EmprestimoDTO {
 	
+	@Schema(description = "ID do usuário que realizará o emprestimo")
 	private Long usuario_id;
+	
+	@Schema(description = "ID do livro que será emprestado")
 	private Long livro_id;
 	
 	public Long getUsuario_id() {

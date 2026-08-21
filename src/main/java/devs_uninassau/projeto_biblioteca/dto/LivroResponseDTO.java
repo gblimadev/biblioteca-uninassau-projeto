@@ -1,10 +1,19 @@
 package devs_uninassau.projeto_biblioteca.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class LivroResponseDTO {
 	
+	@Schema(description = "Identificador único do livro")
 	private Long id;
+	
+	@Schema(description = "Título do livro")
 	private String titulo;
+	
+	@Schema(description = "Autor do livro")
 	private String autor;
+	
+	@Schema(description = "Ano de publicação do livro")
 	private Integer ano;
 	
 	public Long getId() {

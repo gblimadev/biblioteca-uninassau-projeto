@@ -1,9 +1,16 @@
 package devs_uninassau.projeto_biblioteca.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class LivroDTO {
 	
+	@Schema(description = "Título do livro")
 	private String titulo;
+	
+	@Schema(description = "Autor do livro")
 	private String autor;
+	
+	@Schema(description = "Ano de publicação livro")
 	private Integer ano;
 	
 	public String getTitulo() {

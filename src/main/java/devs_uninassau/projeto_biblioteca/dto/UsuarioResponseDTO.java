@@ -1,9 +1,16 @@
 package devs_uninassau.projeto_biblioteca.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class UsuarioResponseDTO {
 	
+	@Schema(description = "Identificador único do usuário")
 	private Long id;
+	
+	@Schema(description = "Nome completo do usuário")
     private String nome;
+	
+	@Schema(description = "Endereço de E-mail do usuário")
     private String email;
     
 	public Long getId() {
