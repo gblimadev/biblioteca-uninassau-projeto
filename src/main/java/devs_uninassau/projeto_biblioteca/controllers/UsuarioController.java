@@ -18,6 +18,9 @@ import devs_uninassau.projeto_biblioteca.dto.UsuarioDTO;
 import devs_uninassau.projeto_biblioteca.dto.UsuarioResponseDTO;
 import devs_uninassau.projeto_biblioteca.entities.Usuario;
 import devs_uninassau.projeto_biblioteca.services.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,6 +30,11 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 
+	@Operation(summary = "Cadastrar usuário")
+	@ApiResponses({
+		@ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Dados inválidos")
+	})
 	@PostMapping
 	public ResponseEntity<UsuarioResponseDTO> insert(@Valid @RequestBody UsuarioDTO usuarioDTO) {
 
@@ -44,6 +52,10 @@ public class UsuarioController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponseDTO);
 	}
 
+	@Operation(summary = "Listar todos os usuários")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Usuários encontrados")
+	})
 	@GetMapping
 	public List<UsuarioResponseDTO> findAll() {
 
@@ -63,7 +75,12 @@ public class UsuarioController {
 		
 		return resposta;
 	}
-
+	
+	@Operation(summary = "Buscar usuário por ID")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Usuario encontrado"),
+		@ApiResponse(responseCode = "404", description = "Usuario não encontrado")
+	})
 	@GetMapping("/{id}")
 	public UsuarioResponseDTO findById(@PathVariable Long id) {
 		
@@ -77,11 +94,22 @@ public class UsuarioController {
 		return usuarioResponseDTO;
 	}
 
+	@Operation(summary = "Excluir usuário")
+	@ApiResponses({
+		@ApiResponse(responseCode = "204", description = "Usuário excluido com sucesso"),
+		@ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+	})
 	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable Long id) {
 		usuarioService.deleteById(id);
 	}
 
+	@Operation(summary = "Atualizar usuário")
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Dados inválidos"),
+		@ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+	})
 	@PutMapping("/{id}")
 	public UsuarioResponseDTO update(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
 		
